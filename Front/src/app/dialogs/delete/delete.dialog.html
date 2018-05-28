@@ -1,0 +1,18 @@
+<div class="container" style="width:485px; height:200px!important; ">
+  <h3 mat-dialog-title>Êtes-vous sûr ?</h3>
+  <div mat-dialog-content>
+    Matricule: {{data.Matricule}}
+    <p></p>
+    NOM: {{data.NOM}}
+    <p></p>
+    PRENOM: {{data.PRENOM}}
+    <p></p>
+
+
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="1" (click)="confirmDelete()">Supprimer</button>
+    <button mat-button (click)="onNoClick()" tabindex="-1">Annuler</button>
+  </div>
+</div>

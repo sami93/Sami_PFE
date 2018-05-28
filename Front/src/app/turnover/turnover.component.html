@@ -1,0 +1,823 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div id="bg">
+            <img src="../../assets/img/sofrecom7_fixedsize.jpg"  alt=""/>
+        </div>
+       <!-- <particles [params]="myParams" [style]="myStyle" [width]="width" [height]="height"></particles> -->
+        <h1 style="color:dodgerblue;" align="center">
+            <teximate [text]="text" [effect]="effectOptions" [hover]="hoverOptions"></teximate>
+        </h1>
+
+
+        <div class="header text-center">
+
+            <button mat-icon-button (click)="refresh()">
+                <mat-icon>refresh</mat-icon>
+            </button>
+
+        </div>
+
+
+
+        <div class="container mat-elevation-z8">
+            <div class="row">
+                <div class="col-sm-11">
+                    <div class="form">
+                        <mat-form-field floatPlaceholder="never" color="accent">
+                            <input matInput #filter placeholder="Recherche des Employés par Matricule ou Nom">
+                        </mat-form-field>
+                    </div>
+
+                    <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+
+                        <!--- Note that these columns can be defined in any order.
+                              The actual rendered columns are set as a property on the row definition" -->
+
+                        <!-- ID Column -->
+                        <ng-container matColumnDef="Matricule">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Matricule</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.Matricule}}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="NOM">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>NOM</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> ...</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Civilite" layout-align="center center">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Civilite</mat-header-cell>
+                            <mat-cell *matCellDef="let row" layout-align="center center"> {{row.Civilite}}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="SITUATION_FAMILIALE">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>SITUATION_FAMILIALE</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.SITUATION_FAMILIALE}}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="DateEmbauche">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Date d'Embauche</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.DateEmbauche}}</mat-cell>
+                        </ng-container>
+
+
+                        <!-- actions -->
+                        <ng-container matColumnDef="actions">
+                            <mat-header-cell *matHeaderCellDef>
+                                <button mat-icon-button color="primary" data-toggle="modal" data-target="#myModal">
+                                    <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+                                </button>
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let row; let i=index;">
+
+                                <button mat-icon-button color="accent" (click)="TensorflowPredictionPerPerson(row)"
+                                        matTooltip="Prédiction de {{row.Matricule}}" [matTooltipPosition]="'left'">
+                                    <mat-icon aria-label="visibility" class="white-icon">visibility</mat-icon>
+                                </button>
+                                <button mat-icon-button color="accent" (click)="startEdit(i, row)"
+                                        matTooltip="Editer {{row.Matricule}}" [matTooltipPosition]="'above'">
+                                    <mat-icon aria-label="Edit" class="white-icon">edit</mat-icon>
+                                </button>
+                                <button mat-icon-button color="accent" aria-label="Info" (click)="infoPersonne(row)"
+                                        matTooltip="Information de {{row.Matricule}}" [matTooltipPosition]="'above'">
+                                    <mat-icon class="white-icon">info</mat-icon>
+                                </button>
+                                <button mat-icon-button color="accent" (click)="generatePdf(row)"
+                                        matTooltip="Export PDF dde {{row.Matricule}}" [matTooltipPosition]="'above'">
+                                    <mat-icon aria-label="backup" class="white-icon">backup</mat-icon>
+
+                                </button>
+                                <button mat-icon-button color="accent" (click)="deleteItem(i, row)"
+                                        matTooltip="Supprimer {{row.Matricule}}" [matTooltipPosition]="'above'">
+                                    <mat-icon aria-label="Delete" class="white-icon">delete</mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+
+
+                    <div class="no-results" [style.display]="dataSource.renderedData.length == 0 ? '' : 'none'">
+                        No results
+                    </div>
+
+                    <mat-paginator #paginator
+                                   [length]="dataSource.filteredData.length"
+                                   [pageIndex]="0"
+                                   [pageSize]="10"
+                                   [pageSizeOptions]="[5, 10, 25, 100]">
+                    </mat-paginator>
+                </div>
+
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog" role="document">
+
+                        <!-- Modal content-->
+                        <form [formGroup]="addDataSetForm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <div id="banner"><img src="assets/img/logo.png"></div>
+
+                                    <div class="main-contents">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="card">
+                                                        <div class="card-header" data-background-color="orange">
+                                                            <h4 class="title" style="  color: 	#F0EFEB;"><i class="fa fa-plus-circle"></i> Ajouter
+                                                                un nouveau Employé</h4>
+                                                            <p class="category" style="  color: 	#F0EFEB;">Compléter toutes les informations</p>
+                                                        </div>
+
+
+                                                        <table class="table table-bordered   ">
+                                                            <tbody>
+
+                                                            <tr>
+                                                                <div class="form-group">
+
+                                                                    <td><label for="Matricule"><b><i
+                                                                            class="fa fa-user-secret "
+                                                                            aria-hidden="true"> Matricule:</i>
+                                                                    </b></label></td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Matricule"
+                                                                               type="number" name="Matricule"
+                                                                               formControlName="Matricule"
+                                                                               placeholder="Matricule"
+                                                                               min="0">
+                                                                    </td>
+
+
+                                                                </div>
+                                                            </tr>
+                                                            <tr>
+
+                                                                <div class="form-group">
+
+                                                                    <td><label for="NOM"><b><i class="fa fa-user-plus "
+                                                                                               aria-hidden="true">
+                                                                        NOM:</i> </b></label></td>
+
+
+                                                                    <td>
+
+                                                                        <input class="form-control" id="NOM"
+                                                                               type="text" name="NOM"
+                                                                               formControlName="NOM"
+                                                                               placeholder="NOM">
+                                                                    </td>
+                                                                </div>
+
+
+                                                            </tr>
+
+                                                            <tr>
+
+                                                                <div class="form-group">
+
+                                                                    <td><label for="PRENOM"><b><i class="fa fa-user-plus "
+                                                                                                  aria-hidden="true">
+                                                                        Name:</i> </b></label></td>
+
+
+                                                                    <td>
+
+                                                                        <input class="form-control" id="PRENOM"
+                                                                               type="text" name="PRENOM"
+                                                                               formControlName="PRENOM"
+                                                                               placeholder="PRENOM">
+                                                                    </td>
+                                                                </div>
+
+
+                                                            </tr>
+
+                                                            <tr>
+                                                                <div class="form-group">
+                                                                    <td><label for="Age"><b><i
+                                                                            class="fa fa-user-circle "
+                                                                            aria-hidden="true"> Age:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <input class="form-control" id="Age"
+                                                                               type="number" name="Age"
+                                                                               formControlName="Age" placeholder="Age"
+                                                                               min="0">
+                                                                    </td>
+                                                                </div>
+                                                            </tr>
+
+
+                                                            <tr>
+                                                                <div class="form-group">
+                                                                    <td><label for="Civilite"><b><i class="fa fa-male "
+                                                                                                    aria-hidden="true">
+                                                                        Civilite:</i> </b></label></td>
+                                                                    <td>
+
+                                                                       <!-- <select name="Civilite" class="form-control"
+                                                                                id="Civilite"
+                                                                                formControlName="Civilite">
+                                                                            <option value="Monsieur">Monsieur</option>
+                                                                            <option value="Madame">Madame</option>
+                                                                            <option value="Mademoiselle">Mademoiselle
+                                                                            </option>
+                                                                        </select>
+                                                                    -->
+                                                                        <mat-form-field>
+                                                                            <mat-select id="Civilite" name="Civilite" placeholder="Choisir Civilité" [formControl]="Civilite" required>
+                                                                                <mat-option>--</mat-option>
+                                                                                <mat-option *ngFor="let civilite of Liste_Civilite" [value]="civilite">
+                                                                                    {{civilite._id}}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                            <mat-error *ngIf="Civilite.hasError('required')">Choisir Civilité</mat-error>
+                                                                            <mat-hint>{{Civilite.value?._id}}</mat-hint>
+                                                                        </mat-form-field>
+
+                                                                    </td>
+
+                                                                </div>
+                                                            </tr>
+                                                            <tr>
+                                                                <div class="form-group">
+                                                                    <td><label for="DateEmbauche"><b><i
+                                                                            class="fa fa-calendar " aria-hidden="true">
+                                                                        DateEmbauche:</i> </b></label></td>
+                                                                    <td>
+
+                                                                        <input class="form-control" id="DateEmbauche"
+                                                                               type="date" name="DateEmbauche"
+                                                                               formControlName="DateEmbauche"
+                                                                               placeholder="DateEmbauche">
+                                                                    </td>
+
+                                                                </div>
+                                                            </tr>
+                                                            <tr>
+                                                                <div class="form-group">
+                                                                    <td><label for="Date_de_Naissance"><b><i
+                                                                            class="fa fa-calendar " aria-hidden="true">
+                                                                        Date_de_Naissance:</i> </b></label></td>
+                                                                    <td>
+
+                                                                        <input class="form-control" id="Date_de_Naissance"
+                                                                               type="date" name="Date_de_Naissance"
+                                                                               formControlName="Date_de_Naissance"
+                                                                               placeholder="Date_de_Naissance">
+                                                                    </td>
+
+                                                                </div>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <div class="form-group">
+                                                                    <td><label for="SITUATION_FAMILIALE"><b><i
+                                                                            class="fa fa-question-circle-o "
+                                                                            aria-hidden="true"> SITUATION_FAMILIALE:</i>
+                                                                    </b></label></td>
+                                                                    <td>
+
+                                                                      <!--  <select name="SITUATION_FAMILIALE"
+                                                                                id="SITUATION_FAMILIALE"
+                                                                                class="form-control"
+                                                                                formControlName="SITUATION_FAMILIALE">
+                                                                            <option value="Célibataire">Célibataire</option>
+                                                                            <option value="Marié">Marié</option>
+                                                                            <option value="Divorcé">Divorcé</option>
+                                                                        </select>
+                                                                    -->
+                                                                        <mat-form-field>
+                                                                            <mat-select id="SITUATION_FAMILIALE" name="SITUATION_FAMILIALE" placeholder="Choisir SITUATION FAMILIALE" [formControl]="SITUATION_FAMILIALE" required>
+                                                                                <mat-option>--</mat-option>
+                                                                                <mat-option *ngFor="let situationfamiliale of Liste_SITUATION_FAMILIALE" [value]="situationfamiliale">
+                                                                                    {{situationfamiliale._id}}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                            <mat-error *ngIf="SITUATION_FAMILIALE.hasError('required')">Choisir SITUATION FAMILIALE</mat-error>
+                                                                            <mat-hint>{{SITUATION_FAMILIALE.value?._id}}</mat-hint>
+                                                                        </mat-form-field>
+
+                                                                    </td>
+
+                                                                </div>
+                                                            </tr>
+
+
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="EXPERIENCE_AVANT_SOFRECOM"><b><i
+                                                                            class="fa fa-calendar-times-o "
+                                                                            aria-hidden="true">
+                                                                        EXPERIENCE_AVANT_SOFRECOM:</i> </b></label></td>
+                                                                    <td>
+
+                                                                        <input class="form-control" type="number"
+                                                                               id="EXPERIENCE_AVANT_SOFRECOM"
+                                                                               name="EXPERIENCE_AVANT_SOFRECOM"
+                                                                               formControlName="EXPERIENCE_AVANT_SOFRECOM"
+                                                                               placeholder="EXPERIENCE_AVANT_SOFRECOM"
+                                                                               min="0"></td>
+
+
+                                                                </tr>
+                                                            </div>
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="EXPERIENCE_SOFRECOM"><b><i
+                                                                            class="fa fa-calendar-plus-o "
+                                                                            aria-hidden="true"> EXPERIENCE_SOFRECOM:</i>
+                                                                    </b></label></td>
+                                                                    <td>
+                                                                        <input class="form-control" type="number"
+                                                                               id="EXPERIENCE_SOFRECOM"
+                                                                               name="EXPERIENCE_SOFRECOM"
+                                                                               formControlName="EXPERIENCE_SOFRECOM"
+                                                                               placeholder="EXPERIENCE_SOFRECOM"
+                                                                               min="0"></td>
+
+                                                                </tr>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="EXPERIENCE_Totale"><b><i
+                                                                            class="fa fa-calendar-check-o "
+                                                                            aria-hidden="true"> EXPERIENCE_Totale:</i>
+                                                                    </b></label></td>
+                                                                    <td>
+                                                                        <input class="form-control" type="number"
+                                                                               id="EXPERIENCE_Totale"
+                                                                               name="EXPERIENCE_Totale"
+                                                                               formControlName="EXPERIENCE_Totale"
+                                                                               placeholder="EXPERIENCE_Totale"
+                                                                               min="0">
+                                                                    </td>
+
+                                                                </tr>
+                                                            </div>
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Ecole"><b><i
+                                                                            class="fa fa-university "
+                                                                            aria-hidden="true"> Ecole:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" type="text"
+                                                                               id="Ecole" name="Ecole"
+                                                                               formControlName="Ecole"
+                                                                               placeholder="Ecole"
+                                                                               min="0"></td>
+
+                                                                </tr>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Manager"><b><i
+                                                                            class="fa fa-user-circle "
+                                                                            aria-hidden="true"> Manager:</i>
+                                                                    </b></label></td>
+                                                                    <td>
+                                                                       <!-- <input class="form-control" id="Manager"
+                                                                               type="text" name="Manager"
+                                                                               formControlName="Manager"
+                                                                               placeholder="Mx"
+                                                                        >
+                                                                        -->
+                                                                        <mat-form-field>
+                                                                            <mat-select id="Manager" name="Manager" placeholder="Choisir Manager" [formControl]="Manager" required>
+                                                                                <mat-option>--</mat-option>
+                                                                                <mat-option *ngFor="let manager of Liste_Manager" [value]="manager">
+                                                                                    {{manager._id}}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                            <mat-error *ngIf="Manager.hasError('required')">Choisir Manager</mat-error>
+                                                                            <mat-hint>{{Manager.value?._id}}</mat-hint>
+                                                                        </mat-form-field>
+                                                                    </td>
+
+                                                                </tr>
+                                                            </div>
+
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Pole"><b><i class="fa fa-group "
+                                                                                                aria-hidden="true">
+                                                                        Pole:</i> </b></label></td>
+                                                                    <td>
+                                                                        <!--<input class="form-control" id="Pole"
+                                                                               type="text" name="Pole"
+                                                                               formControlName="Pole" placeholder="Pole"
+                                                                        > -->
+                                                                        <mat-form-field>
+                                                                            <mat-select id="Pole" name="Pole" placeholder="Choisir Pôle" [formControl]="Pole" required>
+                                                                                <mat-option>--</mat-option>
+                                                                                <mat-option *ngFor="let pole of Liste_Pole" [value]="pole">
+                                                                                    {{pole._id}}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                            <mat-error *ngIf="Pole.hasError('required')">Choisir Pôle</mat-error>
+                                                                            <mat-hint>{{Pole.value?._id}}</mat-hint>
+                                                                        </mat-form-field>
+
+                                                                    </td>
+
+                                                                </tr>
+                                                            </div>
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Poste"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Poste:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <!--<input class="form-control" id="Poste"
+                                                                               type="text" name="Poste"
+                                                                               formControlName="Poste"
+                                                                               placeholder="Poste"
+                                                                        > -->
+                                                                        <mat-form-field>
+                                                                            <mat-select id="Poste" name="Poste" placeholder="Choisir Poste" [formControl]="Poste" required>
+                                                                                <mat-option>--</mat-option>
+                                                                                <mat-option *ngFor="let poste of Liste_Poste" [value]="poste">
+                                                                                    {{poste._id}}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                            <mat-error *ngIf="Poste.hasError('required')">Choisir Poste</mat-error>
+                                                                            <mat-hint>{{Poste.value?._id}}</mat-hint>
+                                                                        </mat-form-field>
+                                                                    </td>
+
+                                                                </tr>
+                                                            </div>
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Seniorite"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Séniorité:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <mat-form-field>
+                                                                            <mat-select id="Seniorite" name="Seniorite" placeholder="Choisir Séniorité" [formControl]="Seniorite" required>
+                                                                                <mat-option>--</mat-option>
+                                                                                <mat-option *ngFor="let seniorite of Liste_Seniorite" [value]="seniorite">
+                                                                                    {{seniorite._id}}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                            <mat-error *ngIf="Seniorite.hasError('required')">Choisir Séniorité</mat-error>
+                                                                            <mat-hint>{{Seniorite.value?._id}}</mat-hint>
+                                                                        </mat-form-field>
+                                                                    </td>
+
+                                                                </tr>
+                                                            </div>
+
+
+
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Niveau_Academique"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Niveau_Academique:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Niveau_Academique" type="text"
+                                                                               name="v" formControlName="Niveau_Academique"
+                                                                               placeholder="Niveau_Academique"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Dernier_Employeur"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Dernier_Employeur:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Dernier_Employeur" type="text"
+                                                                               name="v" formControlName="Dernier_Employeur"
+                                                                               placeholder="Dernier_Employeur"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Eval_3_mois"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Eval_3_mois:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Eval_3_mois" type="text"
+                                                                               name="v" formControlName="Eval_3_mois"
+                                                                               placeholder="Eval_3_mois"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Fin_PE"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Fin_PE:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Fin_PE" type="text"
+                                                                               name="v" formControlName="Fin_PE"
+                                                                               placeholder="Fin_PE"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Mois"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Mois:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Mois" type="text"
+                                                                               name="v" formControlName="Mois"
+                                                                               placeholder="Mois"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Date_de_depot_de_demission"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Date_de_depot_de_demission:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Date_de_depot_de_demission" type="date"
+                                                                               name="v" formControlName="Date_de_depot_de_demission"
+                                                                               placeholder="Date_de_depot_de_demission"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="DATE_SORTIE_Paie"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> DATE_SORTIE_Paie:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="DATE_SORTIE_Paie" type="date"
+                                                                               name="v" formControlName="DATE_SORTIE_Paie"
+                                                                               placeholder="DATE_SORTIE_Paie"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Date_de_sortie_RH"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Date_de_sortie_RH:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Date_de_sortie_RH" type="date"
+                                                                               name="v" formControlName="Date_de_sortie_RH"
+                                                                               placeholder="Date_de_sortie_RH"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Mois_de_sortie_RH"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Mois_de_sortie_RH:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Mois_de_sortie_RH" type="text"
+                                                                               name="v" formControlName="Mois_de_sortie_RH"
+                                                                               placeholder="Mois_de_sortie_RH"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="ANNEE_SORTIE"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> ANNEE_SORTIE:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="ANNEE_SORTIE" type="text"
+                                                                               name="v" formControlName="ANNEE_SORTIE"
+                                                                               placeholder="ANNEE_SORTIE"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="MOIS_SORTIE"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> MOIS_SORTIE:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="MOIS_SORTIE" type="text"
+                                                                               name="v" formControlName="MOIS_SORTIE"
+                                                                               placeholder="MOIS_SORTIE"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Moyenne_preavis"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Moyenne_preavis:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Moyenne_preavis" type="text"
+                                                                               name="v" formControlName="Moyenne_preavis"
+                                                                               placeholder="Moyenne_preavis"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Nombre_moyen_de_mois_de_preavis_Arrondi"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Nombre_moyen_de_mois_de_preavis_Arrondi:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Nombre_moyen_de_mois_de_preavis_Arrondi" type="text"
+                                                                               name="v" formControlName="Nombre_moyen_de_mois_de_preavis_Arrondi"
+                                                                               placeholder="Nombre_moyen_Arrondi"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+
+
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Nombre_moyen_de_mois_de_preavis"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Nombre_moyen_de_mois_de_preavis:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Nombre_moyen_de_mois_de_preavis" type="text"
+                                                                               name="v" formControlName="Nombre_moyen_de_mois_de_preavis"
+                                                                               placeholder="Nombre_moyen"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Raison_de_depart"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Raison_de_depart:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Raison_de_depart" type="text"
+                                                                               name="v" formControlName="Raison_de_depart"
+                                                                               placeholder="Raison_de_depart"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+
+
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Destination"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Destination:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Destination" type="text"
+                                                                               name="v" formControlName="Destination"
+                                                                               placeholder="Destination"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <tr>
+                                                                    <td><label for="Nationalite"><b><i
+                                                                            class="fa fa-user-circle-o "
+                                                                            aria-hidden="true"> Nationalite:</i> </b></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input class="form-control" id="Nationalite" type="text"
+                                                                               name="v" formControlName="Nationalite"
+                                                                               placeholder="Nationalite"
+                                                                        ></td>
+
+                                                                </tr>
+                                                            </div>
+                                                            </tbody>
+                                                        </table>
+
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="modal-body">
+
+
+                                </div>
+
+                                <div class="modal-footer">
+
+
+                                    <!--   <button type="btn btn-primary" class="btn btn-default" data-dismiss="modal"><i class="fa fa-floppy-o"></i> Close</button> -->
+                                    <button class="btn btn-primary" type="submit" [disabled]="!addDataSetForm.valid"
+                                            (click)="addDataSet()" data-dismiss="modal"><i class="fa fa-plus"></i> Ajouter un employé
+                                    </button>
+
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
