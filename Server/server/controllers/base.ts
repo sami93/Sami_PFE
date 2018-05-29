@@ -9,6 +9,13 @@ abstract class BaseCtrl {
       res.json(docs);
     });
   };
+  getAllList = (req, res) => {
+    this.model.find({},   { Matricule: 1,  _id: 0 }
+      , (err, docs) => {
+      if (err) { return console.error(err); }
+      res.json(docs);
+    });
+  };
 
   // Count all
   count = (req, res) => {

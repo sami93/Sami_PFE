@@ -50,111 +50,111 @@ export default class PredictCtrl extends BaseCtrl {
       },  (error, resp, body) => {
 
 
-console.log(body)
+        console.log(body)
 
-            let obj2 = body;
-            obj2 = JSON.parse(obj2);
+        let obj2 = body;
+        obj2 = JSON.parse(obj2);
 
-            //obj2 = JSON.parse(obj2);
-            console.log(obj2)
-            obj.DEM = obj2[0].DEM;
+        //obj2 = JSON.parse(obj2);
+        console.log(obj2)
+        obj.DEM = obj2[0].DEM;
 
-            /* creation of an object */
-            const todayTime = new Date();
+        /* creation of an object */
+        const todayTime = new Date();
 
-            const hour = ('0' + todayTime.getHours()).slice(-2);
-            const minute = ('0' + todayTime.getMinutes()).slice(-2);
-            const sec = ('0' + todayTime.getSeconds()).slice(-2);
-            const timeNow = hour + ':' + minute + ':' + sec;
-
-
-            const year = ('0' + todayTime.getFullYear()).slice(-2);
-            const month = ('0' + (todayTime.getMonth() + 1)).slice(-2);
-            const day = ('0' + todayTime.getDate()).slice(-2);
-            const datefull = day + '/' + month + '/' + year;
+        const hour = ('0' + todayTime.getHours()).slice(-2);
+        const minute = ('0' + todayTime.getMinutes()).slice(-2);
+        const sec = ('0' + todayTime.getSeconds()).slice(-2);
+        const timeNow = hour + ':' + minute + ':' + sec;
 
 
-            var InfoPers = obj;
-            InfoPers.date = datefull;
-            InfoPers.time = timeNow;
-            InfoPers.predict = InfoPers.DEM;
-
-            //console.log(req.body);
-            var item = InfoPers;
-            var date_predict = {
-              "predict_value": item.predict, "date_value": item.date, "time_value": item.time, "Age": item.Age,
-              "Civilite": item.Civilite,
-              "NOM": item.NOM,
-              "PRENOM": item.PRENOM,
-              "DateEmbauche": item.DateEmbauche,
-              "EXPERIENCE_AVANT_SOFRECOM": item.EXPERIENCE_AVANT_SOFRECOM,
-              "EXPERIENCE_SOFRECOM": item.EXPERIENCE_SOFRECOM,
-              "EXPERIENCE_Totale": item.EXPERIENCE_Totale,
-              "Ecole": item.Ecole,
-              "Manager": item.Manager,
-              "Matricule": item.Matricule,
-              "Pole": item.Pole,
-              "Poste": item.Poste,
-              "SITUATION_FAMILIALE": item.SITUATION_FAMILIALE,
-              "Seniorite": item.Seniorite,
-              "Niveau_Academique": item.Niveau_Academique,
-              "Dernier_Employeur": item.Dernier_Employeur,
-
-              "Eval_3_mois": item.Eval_3_mois,
-              "Fin_PE":item.Fin_PE,
-              "Mois": item.Mois,
-              "Date_de_depot_de_demission": item.Date_de_depot_de_demission,
-
-              "DATE_SORTIE_Paie": item.DATE_SORTIE_Paie,
-              "Date_de_sortie_RH": item.Date_de_sortie_RH,
-              "Mois_de_sortie_RH": item.Mois_de_sortie_RH,
-              "ANNEE_SORTIE": item.ANNEE_SORTIE,
-              "MOIS_SORTIE": item.MOIS_SORTIE,
-
-              "Moyenne_preavis": item.Moyenne_preavis,
-              "Nombre_moyen_de_mois_de_preavis_Arrondi": item.Nombre_moyen_de_mois_de_preavis_Arrondi,
-              "Nombre_moyen_de_mois_de_preavis": item.Nombre_moyen_de_mois_de_preavis,
-              "Raison_de_depart": item.Raison_de_depart,
-              "Destination": item.Destination,
-              "Nationalite": item.Nationalite,
-
-              "Date_de_Naissance": item.Date_de_Naissance,
-            };
-
-            console.log(date_predict);
-            /* var date_predict = {"predict_value": item.predict, "date_value": item.date, "time_value": item.time,
-             "Age": item.Age,
-             "Civilite": item.Age,
-             "DateEmbauche":  item.DateEmbauche,
-             "EXPERIENCE_AVANT_SOFRECOM":  item.EXPERIENCE_AVANT_SOFRECOM,
-             "EXPERIENCE_SOFRECOM":  item.EXPERIENCE_SOFRECOM,
-             "EXPERIENCE_Totale":  item.EXPERIENCE_Totale,
-             "Ecole":  item.Ecole,
-             "Manager":  item.Manager,
-             "Matricule":  item.Matricule,
-             "Metier":  item.Metier,
-             "Pole":  item.Pole,
-             "Poste":  item.Poste};
-             */
-            var queryname;
-            if (item.Matricule == null) {
-              queryname = {"Matricule": item.Matricule};
-            }
-            else {
-              queryname = {"Matricule": item.Matricule};
-            }
+        const year = ('0' + todayTime.getFullYear()).slice(-2);
+        const month = ('0' + (todayTime.getMonth() + 1)).slice(-2);
+        const day = ('0' + todayTime.getDate()).slice(-2);
+        const datefull = day + '/' + month + '/' + year;
 
 
-            Prediction.findOneAndUpdate(queryname, {$push: {date_predict: date_predict}}, {
-              upsert: true,
-              new: true
-            }, function (err3, doc) {
-              if (err) {
-                console.log(err);
+        var InfoPers = obj;
+        InfoPers.date = datefull;
+        InfoPers.time = timeNow;
+        InfoPers.predict = InfoPers.DEM;
 
-              }
-              res.json(date_predict);
-            });
+        //console.log(req.body);
+        var item = InfoPers;
+        var date_predict = {
+          "predict_value": item.predict, "date_value": item.date, "time_value": item.time, "Age": item.Age,
+          "Civilite": item.Civilite,
+          "NOM": item.NOM,
+          "PRENOM": item.PRENOM,
+          "DateEmbauche": item.DateEmbauche,
+          "EXPERIENCE_AVANT_SOFRECOM": item.EXPERIENCE_AVANT_SOFRECOM,
+          "EXPERIENCE_SOFRECOM": item.EXPERIENCE_SOFRECOM,
+          "EXPERIENCE_Totale": item.EXPERIENCE_Totale,
+          "Ecole": item.Ecole,
+          "Manager": item.Manager,
+          "Matricule": item.Matricule,
+          "Pole": item.Pole,
+          "Poste": item.Poste,
+          "SITUATION_FAMILIALE": item.SITUATION_FAMILIALE,
+          "Seniorite": item.Seniorite,
+          "Niveau_Academique": item.Niveau_Academique,
+          "Dernier_Employeur": item.Dernier_Employeur,
+
+          "Eval_3_mois": item.Eval_3_mois,
+          "Fin_PE":item.Fin_PE,
+          "Mois": item.Mois,
+          "Date_de_depot_de_demission": item.Date_de_depot_de_demission,
+
+          "DATE_SORTIE_Paie": item.DATE_SORTIE_Paie,
+          "Date_de_sortie_RH": item.Date_de_sortie_RH,
+          "Mois_de_sortie_RH": item.Mois_de_sortie_RH,
+          "ANNEE_SORTIE": item.ANNEE_SORTIE,
+          "MOIS_SORTIE": item.MOIS_SORTIE,
+
+          "Moyenne_preavis": item.Moyenne_preavis,
+          "Nombre_moyen_de_mois_de_preavis_Arrondi": item.Nombre_moyen_de_mois_de_preavis_Arrondi,
+          "Nombre_moyen_de_mois_de_preavis": item.Nombre_moyen_de_mois_de_preavis,
+          "Raison_de_depart": item.Raison_de_depart,
+          "Destination": item.Destination,
+          "Nationalite": item.Nationalite,
+
+          "Date_de_Naissance": item.Date_de_Naissance,
+        };
+
+        console.log(date_predict);
+        /* var date_predict = {"predict_value": item.predict, "date_value": item.date, "time_value": item.time,
+         "Age": item.Age,
+         "Civilite": item.Age,
+         "DateEmbauche":  item.DateEmbauche,
+         "EXPERIENCE_AVANT_SOFRECOM":  item.EXPERIENCE_AVANT_SOFRECOM,
+         "EXPERIENCE_SOFRECOM":  item.EXPERIENCE_SOFRECOM,
+         "EXPERIENCE_Totale":  item.EXPERIENCE_Totale,
+         "Ecole":  item.Ecole,
+         "Manager":  item.Manager,
+         "Matricule":  item.Matricule,
+         "Metier":  item.Metier,
+         "Pole":  item.Pole,
+         "Poste":  item.Poste};
+         */
+        var queryname;
+        if (item.Matricule == null) {
+          queryname = {"Matricule": item.Matricule};
+        }
+        else {
+          queryname = {"Matricule": item.Matricule};
+        }
+
+
+        Prediction.findOneAndUpdate(queryname, {$push: {date_predict: date_predict}}, {
+          upsert: true,
+          new: true
+        }, function (err3, doc) {
+          if (err) {
+            console.log(err);
+
+          }
+          res.json(date_predict);
+        });
 
 
 
@@ -626,6 +626,212 @@ console.log(body)
    */
 //}
 
+  PredictionAllPerson = (req, res) => {
+    const todayTime = new Date();
+
+    const hour = ('0' + todayTime.getHours()).slice(-2);
+    const minute = ('0' + todayTime.getMinutes()).slice(-2);
+    const sec = ('0' + todayTime.getSeconds()).slice(-2);
+    const timeNow = hour + ':' + minute + ':' + sec;
+
+
+    const year = ('0' + todayTime.getFullYear()).slice(-2);
+    const month = ('0' + (todayTime.getMonth() + 1)).slice(-2);
+    const day = ('0' + todayTime.getDate()).slice(-2);
+    const datefull = day + '/' + month + '/' + year;
+    DataSet.find({DEM:0}, (err, DatasetList) => {
+      // opération de date
+      if (err) { return console.error(err); }
+      var resultliste = [];
+      DatasetList.forEach ((entry,i) => {
+       /* var objj = {};
+        objj['Matricule']=entry.Matricule;
+        objj['NOM']=entry.NOM;
+        objj['PRENOM']=entry.PRENOM;
+        objj['Civilite']=entry.Civilite;
+        objj['DateEmbauche']=entry.DateEmbauche;
+        objj['Date_de_Naissance']=entry.Date_de_Naissance;
+        objj['SITUATION_FAMILIALE']=entry.SITUATION_FAMILIALE;
+        objj['EXPERIENCE_AVANT_SOFRECOM']=entry.EXPERIENCE_AVANT_SOFRECOM;
+        objj['Ecole']=entry.Ecole;
+        objj['Manager']=entry.Manager;
+
+        objj['Pole']=entry.Pole;
+        objj['Poste']=entry.Poste;
+        objj['Seniorite']=entry.Seniorite;
+        objj['Niveau_Academique']=entry.Niveau_Academique;
+        objj['Dernier_Employeur']=entry.Dernier_Employeur;
+        objj['Eval_3_mois']=entry.Eval_3_mois;
+
+
+        objj['Fin_PE']=entry.Fin_PE;
+        objj['Mois']=entry.Mois;
+        objj['Date_de_depot_de_demission']=entry.Date_de_depot_de_demission;
+        objj['DATE_SORTIE_Paie']=entry.DATE_SORTIE_Paie;
+        objj['Date_de_sortie_RH']=entry.Date_de_sortie_RH;
+
+        objj['Mois_de_sortie_RH']=entry.Mois_de_sortie_RH;
+        objj['ANNEE_SORTIE']=entry.ANNEE_SORTIE;
+        objj['MOIS_SORTIE']=entry.MOIS_SORTIE;
+        objj['Moyenne_preavis']=entry.Moyenne_preavis;
+        objj['Nombre_moyen_de_mois_de_preavis_Arrondi']=entry.Nombre_moyen_de_mois_de_preavis_Arrondi;
+        objj['Nombre_moyen_de_mois_de_preavis']=entry.Nombre_moyen_de_mois_de_preavis;
+        objj['Raison_de_depart']=entry.Raison_de_depart;
+        objj['Destination']=entry.Destination;
+        objj['Nationalite']=entry.Nationalite;
+        objj['DEM']=entry.DEM;
+
+*/
+        var updatedateNow =  month + '/' + day + '/' + year;
+
+        var dateExperience = entry.Date_de_Naissance;
+        dateExperience = dateExperience.split("/");
+        var newDateExperienceupdated = dateExperience[1] + "/"+ dateExperience[0] + "/" + dateExperience[2];
+        var date2 = new Date(newDateExperienceupdated);
+        var date1 = new Date(updatedateNow);
+        var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        var num= diffDays/365;
+        var NewAge = num.toFixed(2);
+          entry['Age']=NewAge;
+
+
+
+                          var dateEmbaucheUpdate =  entry.DateEmbauche;
+                          dateEmbaucheUpdate = dateEmbaucheUpdate.split("/");
+                          var newdateEmbaucheUpdate  = dateEmbaucheUpdate[1] + "/"+ dateEmbaucheUpdate[0] + "/" + dateEmbaucheUpdate[2];
+                          var date3 = new Date(newdateEmbaucheUpdate);
+                          var timeDiff2 = Math.abs(date3.getTime() - date1.getTime());
+                          var diffDays2 = Math.ceil(timeDiff2 / (1000 * 3600 * 24));
+                          var num2= diffDays2/365;
+                          var NewExperienceSofrecom = num2.toFixed(2);
+                  entry['EXPERIENCE_SOFRECOM']= Number(NewExperienceSofrecom);
+        entry['EXPERIENCE_Totale'] = Number( entry.EXPERIENCE_SOFRECOM) + Number( entry.EXPERIENCE_AVANT_SOFRECOM);
+
+
+      });
+
+      request({
+        url: 'http://localhost:5002/PredictionAllEmployee',
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        json: DatasetList
+//  body: JSON.stringify(requestData)
+      },  (error, resp, body) => {
+        var ListePrédictionResult = [];
+        var ListPrédictionEmployee = JSON.parse(body);
+
+
+        ListPrédictionEmployee.forEach ((entry,i) =>{
+          var objectEntry = {};
+          objectEntry['Matricule'] = entry.Matricule;
+          objectEntry['DEM'] = entry.DEM;
+          objectEntry['NOM'] = DatasetList[i].NOM;
+          objectEntry['PRENOM'] = DatasetList[i].PRENOM;
+          objectEntry['Temps'] = timeNow;
+          objectEntry['datefull'] = datefull;
+          if (entry.DEM > 0.5){
+            ListePrédictionResult.push(objectEntry);
+          }
+          //obj2 = JSON.parse(obj2);
+          DatasetList[i].DEM = entry.DEM;
+          var InfoPers =  DatasetList[i];
+          InfoPers.date = datefull;
+          InfoPers.time = timeNow;
+          InfoPers.predict = InfoPers.DEM;
+          var item = InfoPers;
+
+          /* var updatedateNow =  month + '/' + day + '/' + year;
+
+           var dateExperience = item.Date_de_Naissance;
+           dateExperience = dateExperience.split("/");
+           var newDateExperienceupdated = dateExperience[1] + "/"+ dateExperience[0] + "/" + dateExperience[2];
+           var date2 = new Date(newDateExperienceupdated);
+           var date1 = new Date(updatedateNow);
+           var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+           var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+           var num= diffDays/365;
+           var NewAge = num.toFixed(2);
+
+           item.Age=NewAge;
+
+           var dateEmbaucheUpdate = item.DateEmbauche;
+           dateEmbaucheUpdate = dateEmbaucheUpdate.split("/");
+           var newdateEmbaucheUpdate  = dateEmbaucheUpdate[1] + "/"+ dateEmbaucheUpdate[0] + "/" + dateEmbaucheUpdate[2];
+           var date3 = new Date(newdateEmbaucheUpdate);
+           var timeDiff2 = Math.abs(date3.getTime() - date1.getTime());
+           var diffDays2 = Math.ceil(timeDiff2 / (1000 * 3600 * 24));
+           var num2= diffDays2/365;
+           var NewExperienceSofrecom = num2.toFixed(2);
+           item.EXPERIENCE_SOFRECOM = Number(NewExperienceSofrecom);
+           item.EXPERIENCE_Totale = Number(item.EXPERIENCE_SOFRECOM) + Number(item.EXPERIENCE_AVANT_SOFRECOM); */
+          var date_predict = {
+            "predict_value": item.predict, "date_value": item.date, "time_value": item.time, "Age": item.Age,
+            "Civilite": item.Civilite,
+            "NOM": item.NOM,
+            "PRENOM": item.PRENOM,
+            "DateEmbauche": item.DateEmbauche,
+            "EXPERIENCE_AVANT_SOFRECOM": item.EXPERIENCE_AVANT_SOFRECOM,
+            "EXPERIENCE_SOFRECOM": item.EXPERIENCE_SOFRECOM,
+            "EXPERIENCE_Totale": item.EXPERIENCE_Totale,
+            "Ecole": item.Ecole,
+            "Manager": item.Manager,
+            "Matricule": item.Matricule,
+            "Pole": item.Pole,
+            "Poste": item.Poste,
+            "SITUATION_FAMILIALE": item.SITUATION_FAMILIALE,
+            "Seniorite": item.Seniorite,
+            "Niveau_Academique": item.Niveau_Academique,
+            "Dernier_Employeur": item.Dernier_Employeur,
+
+            "Eval_3_mois": item.Eval_3_mois,
+            "Fin_PE":item.Fin_PE,
+            "Mois": item.Mois,
+            "Date_de_depot_de_demission": item.Date_de_depot_de_demission,
+
+            "DATE_SORTIE_Paie": item.DATE_SORTIE_Paie,
+            "Date_de_sortie_RH": item.Date_de_sortie_RH,
+            "Mois_de_sortie_RH": item.Mois_de_sortie_RH,
+            "ANNEE_SORTIE": item.ANNEE_SORTIE,
+            "MOIS_SORTIE": item.MOIS_SORTIE,
+
+            "Moyenne_preavis": item.Moyenne_preavis,
+            "Nombre_moyen_de_mois_de_preavis_Arrondi": item.Nombre_moyen_de_mois_de_preavis_Arrondi,
+            "Nombre_moyen_de_mois_de_preavis": item.Nombre_moyen_de_mois_de_preavis,
+            "Raison_de_depart": item.Raison_de_depart,
+            "Destination": item.Destination,
+            "Nationalite": item.Nationalite,
+
+            "Date_de_Naissance": item.Date_de_Naissance,
+          };
+          var queryname = {"Matricule": item.Matricule};
+
+          Prediction.findOneAndUpdate(queryname, {$push: {date_predict: date_predict}}, {
+            upsert: true,
+            new: true
+          },  (err3, doc) => {
+            if (err) {
+              console.log(err);
+
+            }
+
+
+          });
+
+
+
+
+        });
+        console.log(ListePrédictionResult.length)
+        ListePrédictionResult.sort((a,b) => b.DEM - a.DEM);
+
+        res.json(ListePrédictionResult);
+      });
+    });
+
+  }
 
   get_name = (req, res) => {
     const query = {"name": req.body.name};

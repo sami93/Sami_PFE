@@ -12,6 +12,9 @@ import {Router} from '@angular/router';
 import {Http} from '@angular/http';
 import {PredictionService} from '../services/prediction.service';
 import {FormBuilder} from '@angular/forms';
+import * as JSPdf from 'jspdf';
+declare var jsPDF: any; // Important
+
 
 declare const $: any;
 
@@ -25,6 +28,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private chartSituationFamiliale: AmChart;
     private chartSeniorite: AmChart;
     private chartCivilite: AmChart;
+    private chartPole: any;
+    private chartManager: any;
     private chartAge: AmChart;
     private chart : any;
     private legend : any;
@@ -117,7 +122,128 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     }
 
+    PredictionAllEmployee(){
+        this.predictionservice.getPredictionAllEmployee().subscribe( data =>{
+
+
+            const datefull = data[0].datefull
+            var columns = ["Matricule", "Prénom", "Nom", "Prédiction de démission", "Temps", "Date"];
+            var result = [];
+            data.forEach((entry,i) => { var elementTable = []
+                elementTable[0] = entry.Matricule;
+                elementTable[1] = entry.PRENOM;
+                elementTable[2] = entry.NOM;
+                elementTable[3] = entry.DEM;
+                elementTable[4] = entry.Temps;
+                elementTable[5] = entry.datefull;
+                result.push(elementTable);});
+
+            console.log(result);
+// Only pt supported (not mm or in)
+            var doc2 = new jsPDF('p', 'pt');
+
+            doc2.autoTable(columns, result);
+            doc2.save(datefull + ' Nombre : ' + result.length + ' employés.pdf');
+
+
+        }, err => {})
+
+    }
     ngAfterViewInit() {
+
+        this.datasetService.count_Manager().subscribe(res =>{
+                this.chartManager = this.AmCharts.makeChart("chartdivManager", {
+                    "theme": "light",
+                    "type": "serial",
+                    "dataProvider": res,
+                    "valueAxes": [{
+                        "title": "Nombre des employés classés par manager"
+                    }],
+                    "graphs": [{
+                        "balloonText": "[[category]]:[[value]] employés",
+                        "fillAlphas": 1,
+                        "lineAlpha": 0.2,
+                        "title": "Income",
+                        "type": "column",
+                        "valueField": "count"
+                    }],
+                    "depth3D": 20,
+                    "angle": 30,
+                    "rotate": true,
+                    "categoryField": "_id",
+                    "categoryAxis": {
+                        "gridPosition": "start",
+                        "fillAlpha": 0.05,
+                        "position": "left"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                });
+
+                //  this.chartPole.legend.addListener("rollOverItem", this.handleRollOver);
+
+
+            },
+            err => {
+
+            })
+        this.datasetService.count_Pole().subscribe(res =>{
+                this.chartPole = this.AmCharts.makeChart("chartdivPole", {
+                    "type": "pie",
+                    "startDuration": 1,
+                    "theme": "light",
+                    'titles': [{
+                        'text': 'Pôle',
+                        'size': 16
+                    }],
+                    "addClassNames": false,
+                    "legend":{
+                        "position":"right",
+                        "marginRight":100,
+                        "autoMargins":false
+                    },
+                    "innerRadius": "30%",
+                    "defs": {
+                        "filter": [{
+                            "id": "shadow",
+                            "width": "200%",
+                            "height": "200%",
+                            "feOffset": {
+                                "result": "offOut",
+                                "in": "SourceAlpha",
+                                "dx": 0,
+                                "dy": 0
+                            },
+                            "feGaussianBlur": {
+                                "result": "blurOut",
+                                "in": "offOut",
+                                "stdDeviation": 5
+                            },
+                            "feBlend": {
+                                "in": "SourceGraphic",
+                                "in2": "blurOut",
+                                "mode": "normal"
+                            }
+                        }]
+                    },
+                    "dataProvider": res,
+                    "valueField": "count",
+                    "titleField": "_id",
+                    "export": {
+                        "enabled": true
+                    }
+                });
+
+              //  this.chartPole.legend.addListener("rollOverItem", this.handleRollOver);
+
+
+            },
+            err => {
+
+            })
+
+
  this.datasetService.count_Civilite().subscribe(res =>{
          this.chartCivilite = this.AmCharts.makeChart("chartdivCivilite", {
              "type": "pie",
@@ -245,7 +371,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
                 "outlineColor": "#FFFFFF",
                 "outlineThickness": 2,
                 "labelPosition": "right",
-                "balloonText": "[[_id]]: [[count]]n[[description]]",
+                "balloonText": "[[_id]]: [[count]] employés[[description]]",
                 "export": {
                     "enabled": true
                 }

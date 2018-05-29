@@ -108,6 +108,51 @@ export default class DataSetCtrl extends BaseCtrl {
       res.json(ListeCivilite);
     });
   }
+
+  count_Manager2 = (req, res) => {
+    /*
+     this.model.count((err, count) => {
+     if (err) { return console.error(err); }
+     res.json(count);
+     });*/
+
+
+    DataSet.aggregate({ $match : { DEM : 0} },{
+      $group: {
+        _id: { $toLower: "$Manager" },
+        count: {$sum: 1}
+      }
+    },{$sort: {count: -1}}, function (err, ListeManagers) {
+      res.json(ListeManagers);
+    });
+
+    /*DataSet.aggregate([  {
+      $group: {
+        _id: "$Age",
+        count: {
+          $sum: 1
+        }
+      }
+    }], function(err, ListeManagers) {
+      console.log(ListeManagers)
+    });
+*/
+    /*
+     const aggregatorOpts = [{
+     $unwind: "$date_predict"
+     },
+     {
+     $group: {
+     _id: "$date_predict.date_value",
+     count: { $sum: 1 }
+     }
+     }
+     ]
+
+     console.log(this.model.aggregate(aggregatorOpts).exec());
+     */
+  }
+
   count_Manager = (req, res) => {
     /*
      this.model.count((err, count) => {
@@ -215,7 +260,12 @@ export default class DataSetCtrl extends BaseCtrl {
         _id: { $toLower: "$Pole" },
         count: {$sum: 1}
       }
-    },{$sort: {count: 1}}, function (err, count_Pole) {
+    },{$sort: {count: -1}}, function (err, count_Pole) {
+    count_Pole.forEach ((entry) =>{
+        //entry._id= entry._id.substring(100, 16);
+      entry._id = entry._id.replace('sofrecomtunisie/','');
+      entry._id = entry._id.replace('sofrecom tunisie/','');
+      });
       res.json(count_Pole);
     });
 

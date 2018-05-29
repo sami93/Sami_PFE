@@ -31,6 +31,9 @@ export default function setRoutes(app) {
   router.route('/dataset/Liste_SITUATION_FAMILIALE').get(dataSetCtrl.Liste_SITUATION_FAMILIALE);
   router.route('/dataset/Liste_Civilite').get(dataSetCtrl.Liste_Civilite);
   router.route('/dataset/count_Manager').get(dataSetCtrl.count_Manager);
+  router.route('/dataset/count_Manager2').get(dataSetCtrl.count_Manager2);
+
+
   router.route('/dataset/count_Seniorite').get(dataSetCtrl.count_Seniorite);
   router.route('/dataset/count_SITUATION_FAMILIALE').get(dataSetCtrl.count_SITUATION_FAMILIALE);
   router.route('/dataset/count_Pole').get(dataSetCtrl.count_Pole);
@@ -50,7 +53,9 @@ export default function setRoutes(app) {
   // Prediction
   router.route('/predictionPerPerson/:Matricule').get(predictionCtrl.PredictPersonTensorflow);
   router.route('/prediction').post(predictionCtrl.insert);
-  router.route('/predictions').get(predictionCtrl.getAll);
+ // router.route('/predictions').get(predictionCtrl.getAll);
+  router.route('/predictions').get(predictionCtrl.getAllList);
+
   //router.route('/predicion_update').put(predictionCtrl.update_name);
   router.route('/prediction_update').patch(predictionCtrl.update_prediction_person);
   router.route('/prediction_update_all').patch(predictionCtrl.update_prediction_all);
@@ -59,6 +64,8 @@ export default function setRoutes(app) {
   router.route('/prediction/allPerson').post(predictionCtrl.predict_all);
   router.route('/predictionMat/:Matricule').get(predictionCtrl.getByMatricule);
   router.route('/predictionCount').get(predictionCtrl.count_predict);
+  router.route('/PredictionAllPerson').get(predictionCtrl.PredictionAllPerson);
+
 
   router.route('/test_update').patch(testCtrl.update_name);
   // Users
