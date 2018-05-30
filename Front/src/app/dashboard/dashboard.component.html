@@ -51,12 +51,19 @@
             </div>
         </div>
 -->
-
         <div class="row">
-            <div class="col-lg-4 col-sm-4" >
+            <div class="col-lg-4 col-sm-4" ></div>
+            <div class="col-lg-6 col-sm-6" >
                 <button class="btn btn-primary" type="button"
-                        (click)="PredictionAllEmployee()" ><i class="fa fa-plus"></i> Prédiction pour tous les employés
+                        (click)="EmployeeAllPrediction()" ><i class="fa fa-plus"></i> Prédiction pour tous les employés
                 </button>        </div>
         </div>
-    </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div id="chartPrediction" [style.width.%]="100" [style.height.px]="300"></div>
+
+            </div>
+        </div>
+
+        </div>
 </div>

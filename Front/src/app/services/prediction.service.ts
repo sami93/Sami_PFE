@@ -65,8 +65,11 @@ export class PredictionService {
     getPredictionMatricule(Matricule): Observable<any> {
         return this.http.get(this.urlservice.url + `/api/predictionMat/${Matricule}`).map(res => res.json());
     }
+    getPredictionAllEmployee(dateNow): Observable<any> {
+        return this.http.post(this.urlservice.url + '/api/PredictionAllPerson', JSON.stringify(dateNow), this.options).map(res => res.json());
+    }
 
-    getPredictionAllEmployee(): Observable<any> {
+    getPredictionAllEmployee2(): Observable<any> {
         return this.http.get(this.urlservice.url + '/api/PredictionAllPerson').map(res => res.json());
     }
     getPredictionAll(predictions): Observable<any> {

@@ -64,7 +64,7 @@ export default function setRoutes(app) {
   router.route('/prediction/allPerson').post(predictionCtrl.predict_all);
   router.route('/predictionMat/:Matricule').get(predictionCtrl.getByMatricule);
   router.route('/predictionCount').get(predictionCtrl.count_predict);
-  router.route('/PredictionAllPerson').get(predictionCtrl.PredictionAllPerson);
+  router.route('/PredictionAllPerson').post(predictionCtrl.PredictionAllPerson);
 
 
   router.route('/test_update').patch(testCtrl.update_name);

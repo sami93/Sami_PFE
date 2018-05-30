@@ -20,25 +20,36 @@ export default class PredictCtrl extends BaseCtrl {
       if (err) {
         return console.error(err);
       }
-      //console.log(obj);
+      const todayTime = new Date();
 
-      /* https.get(url, res => {
-         res.setEncoding("utf8");
-         let body = "";
-         res.on("data", data => {
-           body += data;
+      const year = ('0' + todayTime.getFullYear()).slice(-2);
+      const month = ('0' + (todayTime.getMonth() + 1)).slice(-2);
+      const day = ('0' + todayTime.getDate()).slice(-2);
+      const datefull = day + '/' + month + '/' + year;
+      const ndateNow = month + '/' + day + '/' + year;
+      var dateNow = obj.Date_de_Naissance.split("/");
+      var newdateNow = dateNow[1] + "/"+ dateNow[0] + "/" + dateNow[2];
 
-           console.log(body)
-           console.log('sami')
-         });
-         res.on("end", () => {
-           body = JSON.parse(body);
-           console.log(
-           body
-           );
-         });
-       });
-       */
+      var date2 = new Date(newdateNow);
+
+      var date1 = new Date(ndateNow);
+      var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+      var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      var num= diffDays/365;
+      var NewAge = num.toFixed(2);
+      obj['Age']=NewAge;
+
+      var dateEmbaucheUpdate = obj.DateEmbauche.split("/");
+      var newdateEmbaucheUpdate = dateEmbaucheUpdate[1] + "/"+ dateEmbaucheUpdate[0] + "/" + dateEmbaucheUpdate[2];
+
+      var date3 = new Date(newdateEmbaucheUpdate);
+      var timeDiff2 = Math.abs(date3.getTime() - date1.getTime());
+      var diffDays2 = Math.ceil(timeDiff2 / (1000 * 3600 * 24));
+      var num2= diffDays2/365;
+      var NewExperienceSofrecom = num2.toFixed(2);
+      obj['EXPERIENCE_SOFRECOM']= Number(NewExperienceSofrecom);
+      obj['EXPERIENCE_Totale'] = Number( obj.EXPERIENCE_SOFRECOM) + Number( obj.EXPERIENCE_AVANT_SOFRECOM);
+
       request({
         url: 'http://localhost:5002/PredictionPerEmployee',
         method: "POST",
@@ -50,17 +61,15 @@ export default class PredictCtrl extends BaseCtrl {
       },  (error, resp, body) => {
 
 
-        console.log(body)
 
         let obj2 = body;
         obj2 = JSON.parse(obj2);
 
         //obj2 = JSON.parse(obj2);
-        console.log(obj2)
+
         obj.DEM = obj2[0].DEM;
 
         /* creation of an object */
-        const todayTime = new Date();
 
         const hour = ('0' + todayTime.getHours()).slice(-2);
         const minute = ('0' + todayTime.getMinutes()).slice(-2);
@@ -68,10 +77,7 @@ export default class PredictCtrl extends BaseCtrl {
         const timeNow = hour + ':' + minute + ':' + sec;
 
 
-        const year = ('0' + todayTime.getFullYear()).slice(-2);
-        const month = ('0' + (todayTime.getMonth() + 1)).slice(-2);
-        const day = ('0' + todayTime.getDate()).slice(-2);
-        const datefull = day + '/' + month + '/' + year;
+
 
 
         var InfoPers = obj;
@@ -79,7 +85,7 @@ export default class PredictCtrl extends BaseCtrl {
         InfoPers.time = timeNow;
         InfoPers.predict = InfoPers.DEM;
 
-        //console.log(req.body);
+
         var item = InfoPers;
         var date_predict = {
           "predict_value": item.predict, "date_value": item.date, "time_value": item.time, "Age": item.Age,
@@ -121,7 +127,7 @@ export default class PredictCtrl extends BaseCtrl {
           "Date_de_Naissance": item.Date_de_Naissance,
         };
 
-        console.log(date_predict);
+
         /* var date_predict = {"predict_value": item.predict, "date_value": item.date, "time_value": item.time,
          "Age": item.Age,
          "Civilite": item.Age,
@@ -197,7 +203,7 @@ export default class PredictCtrl extends BaseCtrl {
       ],
       function (err, res2) {
         if (err) return console.log(err);
-        console.log(res2); // [ { maxBalance: 98000 } ]
+     // [ { maxBalance: 98000 } ]
       });
     /*
      const aggregatorOpts = [{
@@ -218,7 +224,7 @@ export default class PredictCtrl extends BaseCtrl {
 
   predict_all = (req, res) => {
     var users;
-    console.log('111111');
+
 
     DataSet.find({}, (err, user) => {
       if (err) {
@@ -254,8 +260,8 @@ export default class PredictCtrl extends BaseCtrl {
       fs.writeFileSync(this.pathFile + '/datasetAll.xlsx', xls, 'binary');
 
 
-      console.log('*********************');
-      console.log(__dirname);
+
+
 
       var obj = xlsx.parse(this.pathFile + '/datasetAll.xlsx'); // parses a file
       var rows = [];
@@ -287,16 +293,12 @@ export default class PredictCtrl extends BaseCtrl {
         if (err) {
           return console.log(err);
         }
-        console.log("******datasetAll.csv was saved in the current directory!*******");
       });
       res.send(this.pathFile);
     });
   }
   predict_per_person = (req, res) => {
-    console.log(req.body.Age);
-    console.log(req.body.C1);
-    console.log(req.body.C2);
-    console.log(req.body.C3);
+
     const jsonPrediction = {
       //Name: req.body.Name,
       Matricule: req.body.Matricule,
@@ -327,10 +329,7 @@ export default class PredictCtrl extends BaseCtrl {
   }
 
   generate_csv(pathFile, ConvertPersonObjectToCsv) {
-    console.log('*****will generate a csv File*****');
 
-    console.log(typeof ConvertPersonObjectToCsv);
-    console.log(ConvertPersonObjectToCsv);
     /*var json = {
      foo: 'bar',
      qux: 'moo',
@@ -344,8 +343,6 @@ export default class PredictCtrl extends BaseCtrl {
     fs.writeFileSync(pathFile + '/predict.xlsx', xls, 'binary');
 
 
-    console.log('*********************');
-    console.log(__dirname);
 
     var obj = xlsx.parse(pathFile + '/predict.xlsx'); // parses a file
     var rows = [];
@@ -377,7 +374,6 @@ export default class PredictCtrl extends BaseCtrl {
       if (err) {
         return console.log(err);
       }
-      console.log("******predict.csv was saved in the current directory!*******");
     });
   }
 
@@ -413,8 +409,7 @@ export default class PredictCtrl extends BaseCtrl {
 
     //console.log(req.body);
     var table_predictions = req.body;
-    console.log('alllalalalal');
-    console.log(table_predictions);
+
     for (var i = 0; i < table_predictions.length; i++) {
       var date_predict = {
         "predict_value": table_predictions[i].predict,
@@ -627,6 +622,7 @@ export default class PredictCtrl extends BaseCtrl {
 //}
 
   PredictionAllPerson = (req, res) => {
+
     const todayTime = new Date();
 
     const hour = ('0' + todayTime.getHours()).slice(-2);
@@ -635,10 +631,8 @@ export default class PredictCtrl extends BaseCtrl {
     const timeNow = hour + ':' + minute + ':' + sec;
 
 
-    const year = ('0' + todayTime.getFullYear()).slice(-2);
-    const month = ('0' + (todayTime.getMonth() + 1)).slice(-2);
-    const day = ('0' + todayTime.getDate()).slice(-2);
-    const datefull = day + '/' + month + '/' + year;
+    var dateNow = req.body.dateNow.split("/");
+     dateNow  = dateNow[1] + "/"+ dateNow[0] + "/" + dateNow[2];
     DataSet.find({DEM:0}, (err, DatasetList) => {
       // opération de date
       if (err) { return console.error(err); }
@@ -682,13 +676,15 @@ export default class PredictCtrl extends BaseCtrl {
         objj['DEM']=entry.DEM;
 
 */
-        var updatedateNow =  month + '/' + day + '/' + year;
+       // var updatedateNow =  month + '/' + day + '/' + year;
 
         var dateExperience = entry.Date_de_Naissance;
         dateExperience = dateExperience.split("/");
         var newDateExperienceupdated = dateExperience[1] + "/"+ dateExperience[0] + "/" + dateExperience[2];
         var date2 = new Date(newDateExperienceupdated);
-        var date1 = new Date(updatedateNow);
+
+        var date1 = new Date(req.body.dateNow);
+
         var timeDiff = Math.abs(date2.getTime() - date1.getTime());
         var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
         var num= diffDays/365;
@@ -731,14 +727,14 @@ export default class PredictCtrl extends BaseCtrl {
           objectEntry['NOM'] = DatasetList[i].NOM;
           objectEntry['PRENOM'] = DatasetList[i].PRENOM;
           objectEntry['Temps'] = timeNow;
-          objectEntry['datefull'] = datefull;
+          objectEntry['datefull'] = dateNow;
           if (entry.DEM > 0.5){
             ListePrédictionResult.push(objectEntry);
           }
           //obj2 = JSON.parse(obj2);
           DatasetList[i].DEM = entry.DEM;
           var InfoPers =  DatasetList[i];
-          InfoPers.date = datefull;
+          InfoPers.date = dateNow;
           InfoPers.time = timeNow;
           InfoPers.predict = InfoPers.DEM;
           var item = InfoPers;
@@ -817,6 +813,11 @@ export default class PredictCtrl extends BaseCtrl {
 
             }
 
+            if (i == ListPrédictionEmployee.length -1)
+            { console.log(ListePrédictionResult.length)
+              ListePrédictionResult.sort((a,b) => b.DEM - a.DEM);
+
+              res.json(ListePrédictionResult);}
 
           });
 
@@ -824,10 +825,7 @@ export default class PredictCtrl extends BaseCtrl {
 
 
         });
-        console.log(ListePrédictionResult.length)
-        ListePrédictionResult.sort((a,b) => b.DEM - a.DEM);
 
-        res.json(ListePrédictionResult);
       });
     });
 
@@ -890,12 +888,10 @@ export default class PredictCtrl extends BaseCtrl {
     });
   };
   insert_predict = (req, res) => {
-    console.log(req.body);
-    console.log('************insert_preditct');
-    console.log(req.body.name);
+
     this.model.findOne({name: req.body.name}, (err, predict) => {
       if (predict) {
-        console.log('************hiiiiiiiiiiiiii');
+
         const obj = new this.model(req.body);
         obj.save((error, item) => {
           // 11000 is the code for duplicate key error
@@ -910,10 +906,10 @@ export default class PredictCtrl extends BaseCtrl {
       }
 
       if (!predict) {
-        console.log('************holaaaaa***********');
+
         this.model.findOneAndUpdate({name: req.body.name}, {$set: {predict: 1}}, {new: true}, function (erro, doc) {
           if (erro) {
-            console.log('Something wrong when updating data!');
+
             res.sendStatus(403);
           }
 

@@ -303,11 +303,9 @@ export default class DataSetCtrl extends BaseCtrl {
           obj['count']=entry.count-ListeCivilite2[0].count;
           tableentry.push(obj);
           entry['tabs'] = tableentry;
-          console.log(j);
           j++;
           ListCiviliteCount.push(entry);
 
-          console.log(ListCiviliteCount);
 
 
           if (j==this.TableCivilite.length )
