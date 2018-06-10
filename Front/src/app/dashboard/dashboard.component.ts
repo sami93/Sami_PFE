@@ -85,7 +85,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     erreur(err, NameOfError) {
         swal(
             '' + NameOfError,
-            '' + JSON.stringify(err),
+            '' ,
             'error'
         )
     }
@@ -179,8 +179,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
                             data.forEach((entry, i) => {
                                 var elementTable = []
                                 elementTable[0] = entry.Matricule;
-                                elementTable[1] = entry.PRENOM;
-                                elementTable[2] = entry.NOM;
+                               // elementTable[1] = entry.PRENOM;
+                                // elementTable[2] = entry.NOM;
+                                elementTable[1] = '...';
+                                elementTable[2] = '...';
                                 elementTable[3] = entry.DEM;
                                 elementTable[4] = entry.Temps;
                                 elementTable[5] = entry.datefull;
@@ -326,7 +328,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-
+/*
         this.datasetService.count_Manager().subscribe(res => {
                 this.chartManager = this.AmCharts.makeChart("chartdivManager", {
                     "theme": "light",
@@ -364,6 +366,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             err => {
 
             })
+            */
         this.datasetService.count_Pole().subscribe(res => {
                 this.chartPole = this.AmCharts.makeChart("chartdivPole", {
                     "type": "pie",

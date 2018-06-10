@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         if (this.auth.loggedIn) {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/turnover']);
         }
         var navbar : HTMLElement = this.element.nativeElement;
         this.toggleButton = navbar.getElementsByClassName('navbar-toggle')[0];
@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
     login() {
         this.auth.login(this.loginForm.value).subscribe(
             res => {
-                this.router.navigate(['/dashboard']) ;
+                this.router.navigate(['/turnover']) ;
                swal({
                     type: 'success',
                     title: 'Signed in successfully',
@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
     erreur(err, NameOfError) {
         swal(
             '' + NameOfError,
-            '' + JSON.stringify(err),
+            '',
             'error'
         )
     }

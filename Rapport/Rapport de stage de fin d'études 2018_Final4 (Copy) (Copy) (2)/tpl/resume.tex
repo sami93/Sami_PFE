@@ -1,0 +1,81 @@
+%===== File containing the back cover of the document =====%
+%                                                          %
+% Copyright (C) ISI - All Rights Reserved                  %
+% Proprietary                                              %
+% Written by Med Hossam <med.hossam@gmail.com>, April 2016 %
+%                                                          %
+% @author: HEDHILI Med Houssemeddine                       %
+% @linkedin: http://tn.linkedin.com/in/medhossam           %
+%==========================================================%
+
+%== It's advised to not modify the content of this file ===%
+% To set your information, go to global_config.tex file    %
+%==========================================================%
+
+\thispagestyle{backcover}
+\newgeometry{bottom=25mm,left=15mm,top=20mm,right=15mm}
+
+\begin{changemargin}{3mm}{0cm}
+    \begin{minipage}[c]{0.96\columnwidth}
+        
+        \selectlanguage{arabic}
+        
+        {\LARGE\textbf{ملخّص}}
+        \vskip1mm
+            \begingroup
+            نظرا للمشاكل التي تواجهها \selectlanguage{frenchb}MOCERFOS\selectlanguage{arabic}في أداء مهام التنبؤات التي من شأنها أن تساعد على اتخاذ قرار بشأن استقالة موظفيها في المستقبل، وقد بدأ مشروع لتحسين معالجة هذه المهام. والهدف من ذلك هو تنفيذ تطبيق تكنولوجيا المعلومات الذي يحسن معالجة التنبؤات في الوقت الحقيقي، ويسهل ويحسن الإدارة. وقد تحقق هذا المشروع ضمن شركة \selectlanguage{frenchb}MOCERFOS\selectlanguage{arabic}من خلال تنفيذ الدراسة وتحليلها،وتصميم التطبيق ونمذجة عملياته، وأخيرا تطوير واختبارات التطبيق.
+            %\@arabicAbstract
+            \endgroup
+        \vskip1mm
+        {\textbf{كلمات مفاتيح : } 
+      
+              \begingroup
+                 %     التنبؤ، التعلم الآلي، %
+                 التنبؤ, التعلم الآلي,
+              \selectlanguage{frenchb}
+          CVM\selectlanguage{arabic}،\selectlanguage{frenchb} IA.O2H \selectlanguage{arabic}،\selectlanguage{frenchb} IPA.  
+ %CVM، IA.O2H ،IPA . 
+ \endgroup
+        }
+        
+        {\ifthenelse{\boolean{wantToTypeCompanyAddress}}
+        {% IF TRUE
+            \vskip5mm
+        }{\vskip8mm}}
+        
+        \selectlanguage{frenchb}
+        
+        {\LARGE\textbf{Résumé}}
+        \vskip1mm
+            \begingroup
+                \large
+                \@frenchAbstract
+            \endgroup
+        \vskip1mm
+        {\textbf{Mots clés : }
+            \begingroup
+                \@frenchAbstractKeywords
+            \endgroup
+        }
+        
+        {\ifthenelse{\boolean{wantToTypeCompanyAddress}}
+        {% IF TRUE
+            \vskip5mm
+        }{\vskip8mm}}
+        
+        \selectlanguage{english}
+        {\LARGE\textbf{Abstract}}
+        \vskip1mm
+            \begingroup
+                \large
+                \@englishAbstract
+            \endgroup
+        \vskip1mm
+        {\textbf{Keywords : }
+            \begingroup
+                \@englishAbstractKeywords
+            \endgroup
+        }
+    \end{minipage}
+    
+\end{changemargin}

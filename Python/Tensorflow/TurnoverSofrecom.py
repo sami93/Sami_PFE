@@ -71,7 +71,7 @@ def form():
             <body>
                 <h1>Turnover Sofrecom</h1>
 
-                <form action="/import" method="post" enctype="multipart/form-data">
+                <form action="/import_dataset" method="post" enctype="multipart/form-data">
                    Dataset : <input type="file" name="dataset_file" />
                     <input type="submit" />
                 </form>
@@ -139,6 +139,7 @@ def to_submit(pred_y, name_out):
 # In[7]:
 
 
+
 # Import
 @app.route('/import', methods=["POST"])
 def import_dataset():
@@ -146,6 +147,7 @@ def import_dataset():
     print (request)
     file = request.files['dataset_file']
     global train
+    global trainEmployee
     global Civilite,SITUATION_FAMILIALE, Seniorite,Ecole,Niveau_Academique,Dernier_Employeur, Poste,Pole,Manager
     global column_names
     global Matricule
@@ -155,6 +157,7 @@ def import_dataset():
      #             'Ecole','Niveau_Academique','Dernier_Employeur','Mois','MOIS_SORTIE','Poste','Pole','Manager','Age','SITUATION_FAMILIALE','DEM' ]
     train = pd.read_csv(file, delimiter=';',    encoding="ISO-8859-1")
     test = train
+    trainEmployee = train
     if not file:
         return "No file"
     train = train[column_names]
@@ -288,7 +291,14 @@ def import_dataset():
 
 # In[8]:
 
-
+@app.route("/importEmployeeFile", methods=["GET"])
+def importEmployeeFile():
+    global trainEmployee
+    x = trainEmployee.reset_index().to_json(orient='records')
+    y = open('temp.json', encoding='utf-8')
+    data = json.load(x)
+    print(data)
+    return x
 
 
 @app.route('/import_prediction', methods=["POST"])
@@ -858,6 +868,9 @@ def PredictionAllEmployee():
     return jsonify(
         out
     )
+
+
+
 
 # # Run Application
 

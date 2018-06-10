@@ -33,50 +33,50 @@ export let ROUTES: RouteInfo[] = [];
 export class SidebarComponent implements OnInit {
     public menuItems: any[];
     constructor(public auth: AuthService){
-if(this.auth.isAdmin){
-    ROUTES = [{
-        path: '/dashboard',
-        title: 'Tableau de bord',
-        type: 'link',
-        icontype: 'dashboard'
-    },
-        {
-            path: '/account',
-            title: 'Compte',
-            type: 'link',
-            icontype: 'brightness_auto'
-        },
-        {
-            path: '/turnover',
-            title: 'Turnover',
-            type: 'link',
-            icontype: 'content_paste'
-        },
-        {
-            path: '/components',
-            title: 'Prédictions',
-            type: 'sub',
-            icontype: 'transfer_within_a_station',
-            collapse: 'components',
-            children: [
-                /* {path: 'buttons', title: 'Buttons', ab: 'B'},
-                 {path: 'grid', title: 'Grid System', ab: 'GS'}, */
-                {path: 'modèle_de_prediction', title: 'Modèle',  type: 'sub', ab: 'M' },
+        if(this.auth.isAdmin){
+            ROUTES = [{
+                path: '/dashboard',
+                title: 'Tableau de bord',
+                type: 'link',
+                icontype: 'dashboard'
+            },
+                {
+                    path: '/account',
+                    title: 'Compte',
+                    type: 'link',
+                    icontype: 'brightness_auto'
+                },
+                {
+                    path: '/turnover',
+                    title: 'Turnover',
+                    type: 'link',
+                    icontype: 'content_paste'
+                },
+                {
+                    path: '/components',
+                    title: 'Prédictions',
+                    type: 'sub',
+                    icontype: 'transfer_within_a_station',
+                    collapse: 'components',
+                    children: [
+                        /* {path: 'buttons', title: 'Buttons', ab: 'B'},
+                         {path: 'grid', title: 'Grid System', ab: 'GS'}, */
+                        {path: 'modèle_de_prediction', title: 'Modèle',  type: 'sub', ab: 'M' },
 
-                {path: 'prediction', title: 'Liste Prédictions',  type: 'sub', ab: 'P' }
-                /* {path: 'panels', title: 'Panels', ab: 'P'},
-                 {path: 'sweet-alert', title: 'Sweet Alert', ab: 'SA'},
-                 {path: 'notifications', title: 'Notifications', ab: 'N'},
-                 {path: 'icons', title: 'Icons', ab: 'I'},
-                 {path: 'typography', title: 'Typography', ab: 'T'} */
-            ]
-        },
-        {
-            path: '/user',
-            title: 'Gestion Utilisateurs',
-            type: 'link',
-            icontype: 'people'
-        },/*{
+                        {path: 'prediction', title: 'Liste Prédictions',  type: 'sub', ab: 'P' }
+                        /* {path: 'panels', title: 'Panels', ab: 'P'},
+                         {path: 'sweet-alert', title: 'Sweet Alert', ab: 'SA'},
+                         {path: 'notifications', title: 'Notifications', ab: 'N'},
+                         {path: 'icons', title: 'Icons', ab: 'I'},
+                         {path: 'typography', title: 'Typography', ab: 'T'} */
+                    ]
+                },
+                {
+                    path: '/user',
+                    title: 'Gestion Utilisateurs',
+                    type: 'link',
+                    icontype: 'people'
+                },/*{
         path: '/forms',
         title: 'Forms',
         type: 'sub',
@@ -142,67 +142,67 @@ if(this.auth.isAdmin){
             {path: 'user', title: 'User Page', ab: 'UP'}
         ]
     }*/
-    ]; }
-    else {
-    ROUTES=[{
-        path: '/dashboard',
-        title: 'Tableau de bord',
-        type: 'link',
-        icontype: 'dashboard'
-    },
-        {
-            path: '/account',
-            title: 'Compte',
-            type: 'link',
-            icontype: 'brightness_auto'
-        },
-        {
-            path: '/turnover',
-            title: 'Turnover',
-            type: 'link',
-            icontype: 'content_paste'
-        },
-        {
-            path: '/components',
-            title: 'Prédictions',
-            type: 'sub',
-            icontype: 'transfer_within_a_station',
-            collapse: 'components',
-            children: [
-                /* {path: 'buttons', title: 'Buttons', ab: 'B'},
-                 {path: 'grid', title: 'Grid System', ab: 'GS'}, */
-                {path: 'prediction', title: 'Liste Prédictions',  type: 'sub', ab: 'P' }
-                /* {path: 'panels', title: 'Panels', ab: 'P'},
-                 {path: 'sweet-alert', title: 'Sweet Alert', ab: 'SA'},
-                 {path: 'notifications', title: 'Notifications', ab: 'N'},
-                 {path: 'icons', title: 'Icons', ab: 'I'},
-                 {path: 'typography', title: 'Typography', ab: 'T'} */
-            ]
-        },
-        /*{
-        path: '/forms',
-        title: 'Forms',
-        type: 'sub',
-        icontype: 'content_paste',
-        collapse: 'forms',
-        children: [
-            {path: 'regular', title: 'Regular Forms', ab: 'RF'},
-            {path: 'extended', title: 'Extended Forms', ab: 'EF'},
-            {path: 'validation', title: 'Validation Forms', ab: 'VF'},
-            {path: 'wizard', title: 'Wizard', ab: 'W'}
-        ]
-    }, {
-        path: '/tables',
-        title: 'Tables',
-        type: 'sub',
-        icontype: 'grid_on',
-        collapse: 'tables',
-        children: [
-            {path: 'regular', title: 'Regular Tables', ab: 'RT'},
-            {path: 'extended', title: 'Extended Tables', ab: 'ET'},
-            {path: 'datatables.net', title: 'Datatables.net', ab: 'DT'}
-        ]
-    }*/,/* {
+            ]; }
+        else {
+            ROUTES=[{
+                path: '/dashboard',
+                title: 'Tableau de bord',
+                type: 'link',
+                icontype: 'dashboard'
+            },
+                {
+                    path: '/account',
+                    title: 'Compte',
+                    type: 'link',
+                    icontype: 'brightness_auto'
+                },
+                {
+                    path: '/turnover',
+                    title: 'Turnover',
+                    type: 'link',
+                    icontype: 'content_paste'
+                },
+                {
+                    path: '/components',
+                    title: 'Prédictions',
+                    type: 'sub',
+                    icontype: 'transfer_within_a_station',
+                    collapse: 'components',
+                    children: [
+                        /* {path: 'buttons', title: 'Buttons', ab: 'B'},
+                         {path: 'grid', title: 'Grid System', ab: 'GS'}, */
+                        {path: 'prediction', title: 'Liste Prédictions',  type: 'sub', ab: 'P' }
+                        /* {path: 'panels', title: 'Panels', ab: 'P'},
+                         {path: 'sweet-alert', title: 'Sweet Alert', ab: 'SA'},
+                         {path: 'notifications', title: 'Notifications', ab: 'N'},
+                         {path: 'icons', title: 'Icons', ab: 'I'},
+                         {path: 'typography', title: 'Typography', ab: 'T'} */
+                    ]
+                },
+                /*{
+                path: '/forms',
+                title: 'Forms',
+                type: 'sub',
+                icontype: 'content_paste',
+                collapse: 'forms',
+                children: [
+                    {path: 'regular', title: 'Regular Forms', ab: 'RF'},
+                    {path: 'extended', title: 'Extended Forms', ab: 'EF'},
+                    {path: 'validation', title: 'Validation Forms', ab: 'VF'},
+                    {path: 'wizard', title: 'Wizard', ab: 'W'}
+                ]
+            }, {
+                path: '/tables',
+                title: 'Tables',
+                type: 'sub',
+                icontype: 'grid_on',
+                collapse: 'tables',
+                children: [
+                    {path: 'regular', title: 'Regular Tables', ab: 'RT'},
+                    {path: 'extended', title: 'Extended Tables', ab: 'ET'},
+                    {path: 'datatables.net', title: 'Datatables.net', ab: 'DT'}
+                ]
+            }*/,/* {
         path: '/maps',
         title: 'Maps',
         type: 'sub',
@@ -245,7 +245,7 @@ if(this.auth.isAdmin){
             {path: 'user', title: 'User Page', ab: 'UP'}
         ]
     }*/
-    ];
+            ];
         }
     }
 

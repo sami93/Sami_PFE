@@ -89,7 +89,7 @@ export class TurnoverComponent implements OnInit {
     width = 100;
     height = 100;
     /* End Declaration for Adding DataSet */
-    text = 'TURNOVER  SOFRECOM ';
+    text = 'Turnover  Sofrecom ';
 
     effectOptions: TeximateOptions = {
         type: 'letter',
@@ -595,7 +595,7 @@ this.datasetService.getListe_Manager().subscribe(res => {
     erreur(err, NameOfError) {
         swal(
             '' + NameOfError,
-            '' + JSON.stringify(err),
+            '',
             'error'
         )
     }

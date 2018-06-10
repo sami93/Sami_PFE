@@ -1,0 +1,5 @@
+smartrh au lien de origin
+git remote add smartrh link_github
+git oush -u smartrh master
+
+circleci
